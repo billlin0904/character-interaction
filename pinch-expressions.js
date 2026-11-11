@@ -165,6 +165,9 @@
       this.height = height;
       this.mask = mask;
       this.firstPixel = firstPixel;
+      // Bill's raised donor brows sit above the registered brow patches.
+      // Start surprise at the eye feather so the original brows stay whole.
+      this.firstSurprisePixel = registered ? Math.floor(157 * height / 370) * width : firstPixel;
       this.endPixel = endPixel;
       this.output = ctx.createImageData(width, height);
       this.frames = frames;
@@ -181,7 +184,8 @@
       if (base === this.output.data) this.output = new ImageData(this.width, this.height);
       const output = this.output.data;
       output.set(base);
-      for (let pixel = this.firstPixel; pixel < this.endPixel; pixel++) {
+      const firstPixel = phase === 'surprise' ? this.firstSurprisePixel : this.firstPixel;
+      for (let pixel = firstPixel; pixel < this.endPixel; pixel++) {
         const mask = this.mask[pixel];
         if (!mask) continue;
         const i = pixel * 4;
