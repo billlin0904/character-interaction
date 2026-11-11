@@ -1,0 +1,76 @@
+.portrait-art {
+  position: absolute;
+  inset: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.portrait.circle-ready {
+  aspect-ratio: 1;
+  border-radius: 0;
+  background: transparent;
+}
+
+.circle-ready .portrait-art {
+  display: block;
+  clip-path: circle(46.2% at 50% 49.6%);
+}
+
+/* The canvas contains the approved artwork and its animation together.
+   Fade only the outside edges of the crop, away from the moving face. */
+.circle-ready canvas {
+  position: absolute;
+  left: 20.3%;
+  top: 8.6%;
+  width: 57.1%;
+  height: 71.4%;
+  pointer-events: none;
+  clip-path: ellipse(80.91% 64.71% at 52.01% 57.42%);
+  mask-image: linear-gradient(90deg, transparent, #000 5% 95%, transparent),
+              linear-gradient(transparent, #000 5% 95%, transparent);
+  mask-composite: intersect;
+}
+
+.circle-ready canvas[data-frame="4"][data-pinch-state="idle"]:not([data-mouth-smile="true"]) { opacity: 0; }
+
+.circle-ready .cheek-mark { top: 50.8%; }
+.circle-ready .cheek-left { left: 43.4%; }
+.circle-ready .cheek-right { left: 60.6%; }
+.circle-ready:focus-visible { border-radius: 50%; }
+
+/* Map Bill's wider face crop to the same circular artwork boundary. */
+#portrait[data-character="bill"].circle-ready canvas {
+  left: 10.2%;
+  top: 5.2%;
+  width: 71.6%;
+  height: 89.5%;
+  clip-path: ellipse(64.53% 51.62% at 55.59% 49.61%);
+}
+
+#portrait[data-character="bill"].circle-ready .cheek-mark { top: 58.1%; }
+#portrait[data-character="bill"].circle-ready .cheek-left { left: 39.2%; }
+#portrait[data-character="bill"].circle-ready .cheek-right { left: 60.7%; }
+
+/* Enlarge Claire's artwork and animation by the same 1.2 scale and offset.
+   Invert that mapping for the clips so the visible circle stays in place. */
+#portrait[data-character="claire"].circle-ready .portrait-art {
+  inset: -4.7% auto auto -11.64%;
+  width: 120%;
+  height: 120%;
+  clip-path: circle(38.5% at 51.367% 45.25%);
+}
+
+#portrait[data-character="claire"].circle-ready canvas {
+  left: 12.72%;
+  top: 5.62%;
+  width: 68.52%;
+  height: 85.68%;
+  clip-path: ellipse(67.426% 53.922% at 54.408% 51.331%);
+}
+
+#portrait[data-character="claire"].circle-ready .cheek-mark { top: 56.26%; }
+#portrait[data-character="claire"].circle-ready .cheek-left { left: 40.44%; }
+#portrait[data-character="claire"].circle-ready .cheek-right { left: 61.08%; }

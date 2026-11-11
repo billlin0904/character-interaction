@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101216">
+  <meta name="description" content="選擇 Bill 或 Claire，試試目光跟隨、微笑和捏臉互動。">
+  <title>角色互動網頁</title>
+  <link rel="stylesheet" href="style.css?v=13">
+  <link rel="stylesheet" href="circle-portrait.css?v=14">
+  <script src="pinch-math.js?v=9" defer></script>
+  <script src="pinch-expressions.js?v=13" defer></script>
+  <script src="face-pinch.js?v=13" defer></script>
+  <script src="circle-frames.js?v=14" defer></script>
+  <script src="app.js?v=14" defer></script>
+</head>
+<body>
+  <a href="#portrait" class="skip">跳至互動肖像</a>
+  <main class="interaction-page" id="experience" aria-labelledby="title">
+    <header class="interaction-heading">
+      <div class="interaction-title-row">
+        <h1 id="title">角色互動網頁</h1>
+        <div class="character-switch" role="group" aria-label="選擇角色">
+          <button type="button" data-character="bill" aria-controls="portrait" aria-pressed="true">Bill</button>
+          <button type="button" data-character="claire" aria-controls="portrait" aria-pressed="false">Claire</button>
+        </div>
+      </div>
+      <p id="portrait-help" class="portrait-help">移動游標或在肖像上滑動，<span data-character-name>Bill</span> 的目光會跟著你。<br>游標移到嘴巴會張嘴笑，按住臉頰或下巴輕拉會回彈。</p>
+      <p id="character-status" class="sr-only" role="status"></p>
+    </header>
+
+    <div class="portrait-wrap">
+      <div class="portrait" id="portrait" tabindex="0" role="group" aria-label="Bill 互動肖像" aria-describedby="portrait-help">
+        <img id="portrait-art" class="portrait-art" src="assets/bill-circle.png" width="1254" height="1254" alt="" fetchpriority="high">
+        <canvas id="canvas" width="768" height="960" role="img" aria-label="Bill 的正面肖像，目光會回應你的操作"></canvas>
+        <div class="loading" id="loading" role="status"><p>正在載入肖像…</p></div>
+        <div class="image-error" id="image-error" hidden><p>肖像還沒載入，請再試一次。</p><button id="retry" type="button">重新載入</button></div>
+        <span class="cheek-mark cheek-left" aria-hidden="true"></span>
+        <span class="cheek-mark cheek-right" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <div class="interaction-controls">
+      <div class="controls">
+        <div class="mode-group" role="group" aria-label="互動模式">
+          <button type="button" data-mode="follow" aria-pressed="true">目光跟隨</button>
+          <button type="button" data-mode="demo" aria-pressed="false">自動展示</button>
+          <button type="button" data-mode="paused" aria-pressed="false">暫停</button>
+        </div>
+        <button type="button" id="smile" class="smile-button" aria-label="讓 Bill 微笑">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M8 14c2 3 6 1 8 0M8 9h.01M16 9h.01" stroke-linecap="round"/></svg>
+          <span>笑一個</span>
+        </button>
+      </div>
+
+      <div class="pinch-actions" role="group" aria-label="捏臉試玩">
+        <span>試試捏臉</span>
+        <button type="button" data-pinch="left" disabled>左臉頰</button>
+        <button type="button" data-pinch="right" disabled>右臉頰</button>
+        <button type="button" data-pinch="chin" disabled>下巴</button>
+      </div>
+
+      <details class="direction-details">
+        <summary>更多表情與鍵盤操作 <span aria-hidden="true">＋</span></summary>
+        <div class="expression-choices" role="group" aria-label="選擇表情">
+          <button type="button" data-expression="4" aria-pressed="true">平靜</button>
+          <button type="button" data-expression="10" aria-pressed="false">微笑</button>
+          <button type="button" data-expression="11" aria-pressed="false">好奇</button>
+          <button type="button" data-expression="9" aria-pressed="false">閉眼</button>
+        </div>
+        <div class="direction-grid" role="group" aria-label="選擇目光方向">
+          <button type="button" data-gaze="0" aria-label="看左上">↖</button>
+          <button type="button" data-gaze="1" aria-label="看上方">↑</button>
+          <button type="button" data-gaze="2" aria-label="看右上">↗</button>
+          <button type="button" data-gaze="3" aria-label="看左方">←</button>
+          <button type="button" data-gaze="4" aria-label="看正前方">·</button>
+          <button type="button" data-gaze="5" aria-label="看右方">→</button>
+          <button type="button" data-gaze="6" aria-label="看左下">↙</button>
+          <button type="button" data-gaze="7" aria-label="看下方">↓</button>
+          <button type="button" data-gaze="8" aria-label="看右下">↘</button>
+        </div>
+        <p>聚焦肖像後，用方向鍵移動目光，Enter 微笑，Esc 暫停。</p>
+      </details>
+
+      <p id="mode-label" class="sr-only" role="status">正在載入肖像</p>
+      <p id="feedback" class="sr-only" role="status"></p>
+    </div>
+  </main>
+</body>
+</html>

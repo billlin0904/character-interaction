@@ -1,0 +1,288 @@
+:root {
+  color-scheme: dark;
+  --page-bg: #101216;
+  --surface: #1b1d23;
+  --surface-hover: #332b2b;
+  --text: #f4ede4;
+  --muted: #bcb4aa;
+  --control-border: #73665e;
+  --active-bg: #efddca;
+  --active-text: #231c19;
+  --focus: #fac4a5;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--text);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC",
+    "Microsoft JhengHei", sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, summary {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  border: 0;
+  min-height: 44px;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: .5;
+}
+
+:where(a, button, summary, .portrait):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.skip {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
+  transform: translateY(calc(-100% - 16px));
+  background: var(--active-bg);
+  color: var(--active-text);
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.skip:focus { transform: none; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.interaction-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100svh;
+  gap: 4px;
+  padding: max(20px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+  text-align: center;
+}
+
+.interaction-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.interaction-heading h1 {
+  margin: 0;
+  font-size: clamp(1.375rem, 4vw, 1.875rem);
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.character-switch {
+  display: flex;
+  gap: 8px;
+}
+
+.portrait-help {
+  max-width: 28rem;
+  margin: 6px auto 0;
+  color: var(--muted);
+  font-size: .875rem;
+  text-wrap: balance;
+}
+
+.interaction-page .portrait-wrap {
+  width: min(100%, 37.5rem);
+  max-width: none;
+}
+
+.portrait {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--page-bg);
+  touch-action: none;
+  isolation: isolate;
+}
+
+/* The legacy atlas is taller than the circle. Keep it undistorted on fallback. */
+.portrait:not(.circle-ready):has(canvas[data-drawn="true"]) {
+  aspect-ratio: .8;
+  border-radius: 48% 48% 8px 8px;
+}
+
+.portrait canvas {
+  display: block;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.loading, .image-error {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--page-bg);
+  color: var(--muted);
+  font-size: .875rem;
+}
+
+.loading p, .image-error p { margin: 0 0 8px; }
+
+.interaction-controls {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  width: min(100%, 36rem);
+}
+
+.controls, .mode-group, .pinch-actions, .expression-choices {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.controls, .pinch-actions, .direction-details { width: 100%; }
+.mode-group { flex-wrap: nowrap; }
+
+.character-switch button, .mode-group button, .pinch-actions button, .expression-choices button,
+.direction-grid button, .smile-button, .image-error button {
+  padding: 0 clamp(9px, 2vw, 15px);
+  border: 1px solid var(--control-border);
+  border-radius: 99px;
+  background: var(--surface);
+  font-size: .875rem;
+  white-space: nowrap;
+}
+
+.character-switch button { min-width: 4.25rem; }
+
+.character-switch button[aria-pressed="true"], .mode-group button[aria-pressed="true"],
+.expression-choices button[aria-pressed="true"] {
+  background: var(--active-bg);
+  border-color: var(--active-bg);
+  color: var(--active-text);
+}
+
+.smile-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (hover: hover) {
+  .character-switch button:not([aria-pressed="true"]):hover,
+  .mode-group button:not([aria-pressed="true"]):hover,
+  .expression-choices button:not([aria-pressed="true"]):hover,
+  .pinch-actions button:not(:disabled):hover,
+  .direction-grid button:hover, .smile-button:hover, .image-error button:hover {
+    background: var(--surface-hover);
+  }
+}
+
+.pinch-actions > span, .direction-details {
+  color: var(--muted);
+  font-size: .875rem;
+}
+
+.pinch-actions button, .expression-choices button, .direction-grid button {
+  color: var(--text);
+}
+
+.direction-details summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 8px;
+  list-style: none;
+}
+
+.direction-details summary::-webkit-details-marker { display: none; }
+.direction-details[open] summary > span[aria-hidden="true"] { transform: rotate(45deg); }
+
+.expression-choices { padding: 4px 0; }
+
+.direction-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  justify-content: center;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+.direction-grid button {
+  padding: 0;
+  border-radius: 8px;
+  font-size: 1.125rem;
+}
+
+.direction-details p { margin: 10px 0 0; }
+
+.cheek-mark {
+  position: absolute;
+  z-index: 3;
+  top: 59.5%;
+  width: 32px;
+  height: 32px;
+  margin: -16px;
+  border: 1px dashed rgb(255 255 255 / .75);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+.cheek-left { left: 40.5%; }
+.cheek-right { left: 70.5%; }
+.portrait:focus-visible .cheek-mark { opacity: .7; }
+.portrait.pinching { cursor: grabbing; }
+
+@media (hover: hover) {
+  .portrait:hover .cheek-mark { opacity: .7; }
+}
+
+.portrait.pinching .cheek-mark { opacity: 0; }
+
+@media (min-width: 701px) {
+  .interaction-page .portrait-wrap {
+    width: min(100%, clamp(29rem, 45svh + 10rem, 36rem));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cheek-mark { transition: none; }
+}
